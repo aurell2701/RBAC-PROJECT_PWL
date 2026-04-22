@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+<div class="flex min-h-screen">
+  <%- include('../layouts/sidebar') %>
+  <div class="flex-1 flex flex-col">
+    <%- include('../layouts/header') %>
+    <main class="p-6 flex-1">
+      <div class="bg-white rounded shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">Assign Permission ke Role</h2>
+        <form method="POST" action="/permissions/assign" class="mb-6 flex gap-3">
+          <select name="role_id" class="border rounded px-3 py-2">
+            <% roles.forEach(function(r) { %>
+              <option value="<%= r.id %>"><%= r.name %></option>
+            <% }) %>
+          </select>
+          <select name="permission_id" class="border rounded px-3 py-2">
+            <% permissions.forEach(function(p) { %>
+              <option value="<%= p.id %>"><%= p.name %></option>
+            <% }) %>
+          </select>
+          <button class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Assign</button>
+        </form>
+        <table class="w-full text-sm border-collapse">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="p-3 text-left border">ID</th>
+              <th class="p-3 text-left border">Nama</th>
+              <th class="p-3 text-left border">Resource</th>
+              <th class="p-3 text-left border">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% permissions.forEach(function(p) { %>
+            <tr class="hover:bg-gray-50">
+              <td class="p-3 border"><%= p.id %></td>
+              <td class="p-3 border"><%= p.name %></td>
+              <td class="p-3 border"><%= p.resource %></td>
+              <td class="p-3 border"><%= p.action %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </main>
+    <%- include('../layouts/footer') %>
+  </div>
+</div>
+</body>
+</html>

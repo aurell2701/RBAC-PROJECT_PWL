@@ -1,0 +1,29 @@
+import pool from '../config/database';
+import { RowDataPacket, ResultSetHeader } from 'mysql2';
+
+export interface User extends RowDataPacket {
+  id: number;
+  username: string;
+  password: string;
+  role_id: number;
+}
+
+export const getAllUsers = async (): Promise<User[]> => {
+  const [rows] = await pool.query<User[]>('SELECT * FROM users');
+  return rows;
+};
+
+export const createUser = async (data: { username: string; password: string; role_id: number }) => {
+  const [result] = await pool.query<ResultSetHeader>(
+    'INSERT INTO users (username, password, role_id) VALUES (?, ?, ?)',
+    [data.username, data.password, data.role_id]
+  );
+  return result;
+};
+
+export const deleteUser = async (id: number) => {
+  const [result] = await pool.query<ResultSetHeader>(
+    'DELETE FROM users WHERE id = ?', [id]
+  );
+  return result;
+};
