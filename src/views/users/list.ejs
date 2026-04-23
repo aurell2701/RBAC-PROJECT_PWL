@@ -13,6 +13,8 @@
     <main class="p-6 flex-1">
       <div class="bg-white rounded shadow p-6">
         <h2 class="text-lg font-semibold mb-4">Daftar User</h2>
+
+        <% if (permissions.includes('user:create')) { %>
         <form method="POST" action="/users" class="mb-6 flex gap-3">
           <input name="username" placeholder="Username" required class="border rounded px-3 py-2 flex-1">
           <input name="password" placeholder="Password" required class="border rounded px-3 py-2 flex-1">
@@ -23,12 +25,14 @@
           </select>
           <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Tambah</button>
         </form>
+        <% } %>
+
         <table class="w-full text-sm border-collapse">
           <thead class="bg-gray-100">
             <tr>
               <th class="p-3 text-left border">ID</th>
               <th class="p-3 text-left border">Username</th>
-              <th class="p-3 text-left border">Role ID</th>
+              <th class="p-3 text-left border">Role</th>
               <th class="p-3 text-left border">Aksi</th>
             </tr>
           </thead>
@@ -37,16 +41,30 @@
             <tr class="hover:bg-gray-50">
               <td class="p-3 border"><%= u.id %></td>
               <td class="p-3 border"><%= u.username %></td>
-              <td class="p-3 border"><%= u.role_id %></td>
               <td class="p-3 border">
-                <form method="POST" action="/users/<%= u.id %>/delete">
-                  <button class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600">Hapus</button>
-                </form>
+                <% if (u.role_name === 'admin') { %>
+                  <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold">admin</span>
+                <% } else if (u.role_name === 'editor') { %>
+                  <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-semibold">editor</span>
+                <% } else if (u.role_name === 'viewer') { %>
+                  <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs font-semibold">viewer</span>
+                <% } %>
+              </td>
+              <td class="p-3 border">
+                <% if (permissions.includes('user:delete')) { %>
+                  <form method="POST" action="/users/<%= u.id %>/delete">
+                    <button class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600">Hapus</button>
+                  </form>
+                <% } else { %>
+                  <span class="text-gray-400 text-xs">Tidak diizinkan</span>
+                <% } %>
               </td>
             </tr>
             <% }) %>
           </tbody>
         </table>
+
+        <p class="text-xs text-gray-400 mt-4">Login sebagai: <strong><%= user.username %></strong> | Permissions: <%= permissions.join(', ') %></p>
       </div>
     </main>
     <%- include('../layouts/footer') %>

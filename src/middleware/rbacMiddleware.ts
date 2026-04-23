@@ -6,7 +6,7 @@ export interface AuthRequest extends Request {
 }
 
 export const fakeAuth = async (req: AuthRequest, res: Response, next: NextFunction) => {
-  const userId = 3; // 1=admin, 2=editor, 3=viewer
+  const userId = 1; // 1=admin, 2=editor, 3=viewer
 
   const [userRows] = await pool.query(
     'SELECT id, username, role_id FROM users WHERE id = ?', [userId]

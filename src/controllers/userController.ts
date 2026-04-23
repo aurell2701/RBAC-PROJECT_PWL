@@ -6,7 +6,13 @@ import { getAllRoles } from '../models/roleModel';
 export const listUsers = async (req: AuthRequest, res: Response) => {
   const users = await getAllUsers();
   const roles = await getAllRoles();
-  res.render('users/list', { title: 'User Management', users, roles, user: req.user });
+  res.render('users/list', {
+    title: 'User Management',
+    users,
+    roles,
+    user: req.user,
+    permissions: req.user?.permissions || []  // ← ini yang penting!
+  });
 };
 
 export const storeUser = async (req: AuthRequest, res: Response) => {

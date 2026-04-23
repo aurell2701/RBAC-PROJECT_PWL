@@ -9,7 +9,11 @@ export interface User extends RowDataPacket {
 }
 
 export const getAllUsers = async (): Promise<User[]> => {
-  const [rows] = await pool.query<User[]>('SELECT * FROM users');
+  const [rows] = await pool.query<User[]>(`
+    SELECT u.id, u.username, u.role_id, r.name AS role_name 
+    FROM users u
+    LEFT JOIN roles r ON u.role_id = r.id
+  `);
   return rows;
 };
 
